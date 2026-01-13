@@ -3,6 +3,7 @@ local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/d
 local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
 local localplayer = game.Players.LocalPlayer
 local wspeed = false
+local jumppower = false
 
 local Options = Fluent.Options
 local Window = Fluent:CreateWindow({
@@ -29,9 +30,9 @@ local sectionjumpempty = Tabs.Main:AddSection(" ")
 local walkspeedslider = sectionplayer:AddSlider("walkspeedslider", {
     Title = "Walkspeed",
     Description = "Change your walkspeed.",
-    Default = 32,
+    Default = 16,
     Min = 0,
-    Max = 250,
+    Max = 200,
     Rounding = 0,
     Callback = function(Value)
         if wspeed and localplayer.Character and localplayer.Character:FindFirstChild("Humanoid") then
@@ -79,9 +80,44 @@ local walkspeedkeybind = sectionplayer:AddKeybind("walkspeedkeybind", {
     end
 })
 
+local jumppowerslider = sectionjumpempty:AddSlider("jumppowerslider", {
+    Title = "Change your jump power",
+    Default = 50,
+    Min = 1,
+    Max = 250,
+    Rounding =0,
+    Callback = function(Value)
+        if wspeed and localplayer.Character and localplayer.Character:FindFirstChild("Humanoid") then
+            localplayer.Character.Humanoid.JumpPower = Value
+        end
+    end
+})
+
 local jumppowertoggle = sectionjumpempty:AddToggle("jumppowertoggle", {
     Title = "Enable Jump Power Hack",
     Default = false,
+    Callback = function(Value)
+        jumppower = Value
+        if jumppower then
+            if jumppower and localplayer.Character and localplayer.Character:FindFirstChild("Humanoid") then
+            localplayer.Character.Humanoid.JumpPower = Options.jumppowerslider.Value
+            Fluent:Notify({
+                Title = "kirimyth",
+                Content = "Jumppower set to: " .. Options.jumppowerslider.Value .. "!",
+                Duration = 1
+            })
+            end
+        else
+            if localplayer.Character and localplayer.Character:FindFirstChild("Humanoid") then
+                localplayer.Character.Humanoid.JumpPower = 50
+                Fluent:Notify({
+                Title = "kirimyth",
+                Content = "Jumppower set to: 50! (standard)", 
+                Duration = 1
+            })
+            end
+        end
+    end
 })
 --- Player section ---
 ----- Main Tab -----
@@ -131,4 +167,3 @@ InterfaceManager:SetLibrary(Fluent)
 InterfaceManager:BuildInterfaceSection(Tabs.Settings)
 SaveManager:BuildConfigSection(Tabs.Settings)
 Window:SelectTab(1)
-
