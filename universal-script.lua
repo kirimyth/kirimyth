@@ -2,7 +2,7 @@ local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/
 local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
 local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
 local localplayer = game.Players.LocalPlayer
-local walkspeedenabled = false
+local wspeed = false
 
 local Options = Fluent.Options
 local Window = Fluent:CreateWindow({
@@ -25,7 +25,7 @@ local Tabs = {
 ----- Main Tab -----
 --- Player section ---
 local sectionplayer = Tabs.Main:AddSection("Player")
-local sectionspeedempty = Tabs.Main:AddSection(" ")
+local sectionjumpempty = Tabs.Main:AddSection(" ")
 local walkspeedslider = sectionplayer:AddSlider("walkspeedslider", {
     Title = "Walkspeed",
     Description = "Change your walkspeed.",
@@ -34,7 +34,7 @@ local walkspeedslider = sectionplayer:AddSlider("walkspeedslider", {
     Max = 200,
     Rounding = 0,
     Callback = function(Value)
-        if walkspeedenabled and localplayer.Character and localplayer.Character:FindFirstChild("Humanoid") then
+        if wspeed and localplayer.Character and localplayer.Character:FindFirstChild("Humanoid") then
             localplayer.Character.Humanoid.WalkSpeed = Value
         end
     end
@@ -43,53 +43,43 @@ local walkspeedtoggle = sectionplayer:AddToggle("walkspeedtoggle", {
     Title = "Enable Speed Hack",
     Default = false,
     Callback = function(Value)
-        walkspeedenabled = Value
-        if walkspeedenabled then 
+        wspeed = Value
+        if wspeed then
+            if wspeed and localplayer.Character and localplayer.Character:FindFirstChild("Humanoid") then
+            localplayer.Character.Humanoid.WalkSpeed = Options.walkspeedslider.Value
             Fluent:Notify({
                 Title = "kirimyth",
                 Content = "Speed turned on!",
                 Duration = 1
             })
+            end
         else
             if localplayer.Character and localplayer.Character:FindFirstChild("Humanoid") then
                 localplayer.Character.Humanoid.WalkSpeed = 16
-            end
                 Fluent:Notify({
                 Title = "kirimyth",
-                Content = "Speed turned off!",
+                Content = "Speed turned off!", 
                 Duration = 1
             })
+            end
         end
-    end,
+    end
 })
-local walkspeedtoggle = sectionplayer:AddKeybind("walkspeedkeybind", {
-    Title = "Speed Hack Keybind",
+local walkspeedkeybind = sectionplayer:AddKeybind("walkspeedkeybind", {
+    Title = "Toggle Speed Keybind",
     Mode = "Toggle",
     Default = "X",
     Callback = function(Value)
-        walkspeedenabled = Value
-        if walkspeedenabled then
-            Options.walkspeedtoggle.SetValue(true)
-            Fluent:Notify({
-                Title = "kirimyth",
-                Content = "Speed turned on!",
-                Duration = 1
-            })
+        wspeed = Value
+        if wspeed then
+            walkspeedtoggle:SetValue(true)
         else
-            if localplayer.Character and localplayer.Character:FindFirstChild("Humanoid") then
-                localplayer.Character.Humanoid.WalkSpeed = 16
-                Options.walkspeedtoggle.SetValue(false)
-            end
-                Fluent:Notify({
-                Title = "kirimyth",
-                Content = "Speed turned off!",
-                Duration = 1
-            })
+            walkspeedtoggle:SetValue(false)
         end
-    end,
+    end
 })
 
-local jumppowertoggle = sectionspeedempty:AddToggle("jumppowertoggle", {
+local jumppowertoggle = sectionjumpempty:AddToggle("jumppowertoggle", {
     Title = "Enable Jump Power Hack",
     Default = false,
 })
