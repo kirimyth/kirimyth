@@ -29,9 +29,9 @@ local sectionjumpempty = Tabs.Main:AddSection(" ")
 local walkspeedslider = sectionplayer:AddSlider("walkspeedslider", {
     Title = "Walkspeed",
     Description = "Change your walkspeed.",
-    Default = 16,
+    Default = 32,
     Min = 0,
-    Max = 200,
+    Max = 250,
     Rounding = 0,
     Callback = function(Value)
         if wspeed and localplayer.Character and localplayer.Character:FindFirstChild("Humanoid") then
@@ -131,3 +131,4 @@ InterfaceManager:SetLibrary(Fluent)
 InterfaceManager:BuildInterfaceSection(Tabs.Settings)
 SaveManager:BuildConfigSection(Tabs.Settings)
 Window:SelectTab(1)
+
